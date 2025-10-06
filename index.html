@@ -138,35 +138,47 @@
   background: rgba(255,255,255,0.1);
   border-radius: 15px;
   padding: 10px;
-  width: 100%;
-  max-width: 150px;
+  width: 150px;
   box-shadow: 0 0 15px #00ffff55;
   transition: 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* agar tombol di bawah */
+  align-items: center;
+  height: 240px; /* tinggi seragam untuk semua kartu */
+}
+
+.game-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #00ffff;
+}
+
+.game-card img {
+  width: 100%;
+  border-radius: 10px;
+  height: 100px; /* samakan tinggi gambar */
+  object-fit: cover;
+}
+
+.game-card h3 {
+  font-size: 1rem;
+  margin: 8px 0;
+  min-height: 40px; /* pastikan teks tidak mengubah tinggi total */
+  display: flex;
+  align-items: center;
   text-align: center;
 }
 
-  .game-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px #00ffff;
-  }
-
-  .game-card img {
-    width: 100%;
-    border-radius: 10px;
-  }
-
-  .game-card h3 {
-    font-size: 1rem;
-    margin: 10px 0;
-  }
-
-  .game-card button {
-    padding: 8px 10px;
-    border-radius: 8px;
-    background: #00ffff;
-    color: #000;
-    font-weight: bold;
-  }
+.game-card button {
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #00ffff;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  margin-top: auto; /* pastikan tombol tetap di bawah */
+}
 
   audio {
     display: none;
