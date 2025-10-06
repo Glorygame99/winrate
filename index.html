@@ -51,22 +51,67 @@
     transform: scale(1.05);
   }
 
+  /* === BALOK FUTURISTIK BERSEGMENT === */
   .loading-bar {
+    position: relative;
     margin: 40px auto;
     width: 80%;
-    height: 20px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 10px;
+    height: 40px;
+    background: #111;
+    border-radius: 12px;
+    box-shadow: inset 0 0 25px #000, 0 0 25px #00ffff33;
     overflow: hidden;
-    box-shadow: 0 0 15px #00ffff55;
+    border: 2px solid #00ffff44;
   }
 
   .loading-progress {
+    position: relative;
     height: 100%;
     width: 0;
     background: linear-gradient(90deg, #ff00ff, #00ffff);
     border-radius: 10px;
+    box-shadow: 0 0 20px #00ffff;
     transition: width 0.2s linear;
+    animation: pulse 1.2s infinite alternate;
+  }
+
+  @keyframes pulse {
+    0% { filter: brightness(0.8); }
+    100% { filter: brightness(1.5); }
+  }
+
+  /* Segmen kecil bergerak */
+  .loading-progress::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -50%;
+    height: 100%;
+    width: 50%;
+    background: repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.3) 0px,
+      rgba(255,255,255,0.3) 8px,
+      transparent 8px,
+      transparent 16px
+    );
+    animation: moveSegments 0.8s linear infinite;
+  }
+
+  @keyframes moveSegments {
+    from { left: -50%; }
+    to { left: 100%; }
+  }
+
+  .loading-bar::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.15), rgba(0,0,0,0.3));
+    pointer-events: none;
   }
 
   .winrate {
