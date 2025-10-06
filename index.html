@@ -217,24 +217,28 @@ function cekWinrate() {
   const audio = document.getElementById('loadingSound');
   const section = document.getElementById('gameSection');
 
+  // reset tampilan
   bar.style.display = 'block';
   display.innerHTML = '';
   section.style.display = 'none';
   progress.style.width = '0%';
   audio.play();
 
-  const target = Math.floor(Math.random() * 9) + 90; // 90–98%
+  // buat angka acak 90–98%
+  const target = Math.floor(Math.random() * 9) + 90;
   let current = 0;
 
+  // animasi progress bar sampai sesuai target
   const interval = setInterval(() => {
-    if (current >= 100) clearInterval(interval);
-    else {
-      current += 2;
+    if (current >= target) {
+      clearInterval(interval);
+    } else {
+      current++;
       progress.style.width = current + "%";
     }
-  }, 50); // animasi bar 5 detik total
+  }, 45); // kecepatan animasi bar
 
-  // tampilkan angka winrate perlahan
+  // animasi angka winrate naik bersamaan
   let angka = 0;
   const angkaInterval = setInterval(() => {
     if (angka >= target) {
@@ -246,7 +250,7 @@ function cekWinrate() {
       angka++;
       display.innerHTML = `${angka}% (${user})`;
     }
-  }, 45); // angka naik perlahan juga
+  }, 45);
 }
 
 function tampilkanGame(){
@@ -254,7 +258,7 @@ function tampilkanGame(){
   const grid = document.getElementById('gameGrid');
   section.style.display = 'block';
   grid.innerHTML = '';
-  
+
   const selected = games.sort(()=>0.5 - Math.random()).slice(0,3);
   
   selected.forEach(g => {
