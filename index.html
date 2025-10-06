@@ -58,7 +58,7 @@
 
           <p class="muted" style="margin-top:10px">Atau, kalau kamu sudah tahu winrate, masukkan langsung di bawah:</p>
           <div style="display:flex;gap:10px;margin-top:8px">
-            <input id="directWinrate" type="number" min="0" max="100" placeholder="Winrate % (contoh: 72)" />
+            <input id="directWinrate" type="number" min="0" max="99" placeholder="Winrate % (contoh: 90)" />
             <button id="calcBtn" type="button">Cek Winrate</button>
           </div>
 
@@ -94,9 +94,7 @@
         <h3 style="margin-top:0">Daftar Game & Link Rekomendasi</h3>
         <p class="muted">Atur URL yang akan ditampilkan saat rekomendasi muncul. Klik tombol <strong>Salin</strong> untuk ambil link.</p>
 
-        <div id="gamesList" style="margin-top:12px;display:flex;flex-direction:column;gap:8px">
-          <!-- template entry -->
-        </div>
+        <div id="gamesList" style="margin-top:12px;display:flex;flex-direction:column;gap:8px"></div>
 
         <hr style="border:none;border-top:1px solid rgba(255,255,255,0.04);margin:12px 0" />
         <label for="newName">Tambah / Edit Game</label>
@@ -110,9 +108,9 @@
 
         <div class="note" style="margin-top:12px">Rekomendasi otomatis berbasiskan winrate:
           <ul style="margin:6px 0 0 18px;color:var(--muted)">
-            <li>&ge; 70% — Rekomendasi: <strong>High-Risk / High-Reward</strong> (Pragmatic Turbo, Auto 50x)</li>
-            <li>50–69% — Rekomendasi: <strong>Medium</strong> (Manual 12–16x, Auto 30x)</li>
-            <li>&lt; 50% — Rekomendasi: <strong>Safe / Low-Bet</strong> (Soft PG, Auto 10x)</li>
+            <li>&ge; 90% — Rekomendasi: <strong>High-Risk / High-Reward</strong> (Pragmatic Turbo, Auto 50x)</li>
+            <li>70–89% — Rekomendasi: <strong>Medium</strong> (Manual 12–16x, Auto 30x)</li>
+            <li>&lt; 70% — Rekomendasi: <strong>Safe / Low-Bet</strong> (Soft PG, Auto 10x)</li>
           </ul>
         </div>
       </div>
@@ -120,7 +118,6 @@
   </div>
 
   <script>
-    // Default games
     const defaultGames = [
       {name:'Pragmatic Turbo (Auto 50x)', url:'https://heylink.me/glorygame99/'},
       {name:'Pragmatic Auto 30x', url:'https://heylink.me/glorygame99/'},
@@ -128,7 +125,6 @@
       {name:'PG Soft Low-Bet', url:'https://heylink.me/glorygame99/'}
     ];
 
-    // load from localStorage or defaults
     const storageKey = 'winrec_games_v1';
     let games = JSON.parse(localStorage.getItem(storageKey) || 'null') || defaultGames.slice();
 
@@ -157,18 +153,13 @@
 
     function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
-    function copyLink(i){
-      navigator.clipboard.writeText(games[i].url).then(()=>{alert('Link disalin: '+games[i].url)})
-    }
-    function useGame(i){
-      window.open(games[i].url,'_blank')
-    }
+    function copyLink(i){navigator.clipboard.writeText(games[i].url).then(()=>{alert('Link disalin: '+games[i].url)})}
+    function useGame(i){window.open(games[i].url,'_blank')}
 
     document.getElementById('addGame').addEventListener('click', ()=>{
       const name = document.getElementById('newName').value.trim();
       const url = document.getElementById('newUrl').value.trim();
       if(!name||!url){alert('Isi nama & URL dulu');return}
-      // if name exists update
       const idx = games.findIndex(g=>g.name.toLowerCase()===name.toLowerCase());
       if(idx>=0) games[idx]={name,url}; else games.push({name,url});
       localStorage.setItem(storageKey, JSON.stringify(games));
@@ -182,7 +173,7 @@
 
     document.getElementById('sampleBtn').addEventListener('click', ()=>{
       document.getElementById('playerId').value='user123';
-      document.getElementById('wins').value=36;document.getElementById('total').value=50;document.getElementById('directWinrate').value='';
+      document.getElementById('wins').value=45;document.getElementById('total').value=50;document.getElementById('directWinrate').value='';
     })
 
     document.getElementById('resetBtn').addEventListener('click', ()=>{
@@ -193,11 +184,11 @@
       let winrate = parseFloat(document.getElementById('directWinrate').value);
       const wins = parseInt(document.getElementById('wins').value||0,10);
       const total = parseInt(document.getElementById('total').value||0,10);
-      if(!isNaN(winrate) && winrate>=0 && winrate<=100){
-        // use direct
+      if(!isNaN(winrate) && winrate>=0 && winrate<=99){
       } else {
         if(total<=0){alert('Isi total game valid (>=1) atau masukkan winrate langsung');return}
         winrate = total>0? (wins/total*100) : 0;
+        if(winrate>99) winrate=99;
       }
       showResult(winrate);
     })
@@ -208,14 +199,14 @@
       document.getElementById('resWin').textContent = winrate.toFixed(1)+ ' %';
       const rec = document.getElementById('recommend');
       rec.innerHTML = '';
-      // Determine recommendations
+
       let picks = [];
-      if(winrate>=70){
-        picks = games.filter(g=>/50|turbo|turbo/i.test(g.name) || /Pragmatic/i.test(g.name));
-      } else if(winrate>=50){
-        picks = games.filter(g=>/30|manual|16|12|Auto 30x/i.test(g.name) || /Manual/i.test(g.name));
+      if(winrate>=90){
+        picks = games.filter(g=>/50|turbo|pragmatic/i.test(g.name));
+      } else if(winrate>=70){
+        picks = games.filter(g=>/30|manual|16|12/i.test(g.name));
       } else {
-        picks = games.filter(g=>/Soft|Low|10x|PG/i.test(g.name) || /soft/i.test(g.name));
+        picks = games.filter(g=>/Soft|Low|10x|PG/i.test(g.name));
       }
       if(picks.length===0) picks = games.slice(0,3);
 
@@ -224,12 +215,11 @@
         d.className='game';
         d.innerHTML = `<div class="left"><div class="badge">#${idx+1}</div><div style="margin-left:8px"><div style="font-weight:700">${escapeHtml(p.name)}</div><div class="muted" style="font-size:12px">${escapeHtml(p.url)}</div></div></div><div><button onclick="useGame(${games.indexOf(p)})">Buka</button></div>`;
         rec.appendChild(d);
-      })
+      });
 
       document.getElementById('result').style.display='block';
     }
 
-    // init
     renderGames();
   </script>
 </body>
