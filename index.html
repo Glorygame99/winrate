@@ -1,145 +1,207 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Winrate Di-Upgrade</title>
-  <style>
-    :root{
-      --bg1: #0b0320;
-      --bg2: #170134;
-      --accent1: #6EE7F6;
-      --accent2: #7C3AED;
-      --glow: rgba(110,231,246,0.18);
-      --card: rgba(255,255,255,0.04);
-      --text: #e7f9ff;
-    }
-    *{box-sizing:border-box;font-family:Inter, "Helvetica Neue", Arial, sans-serif}
-    html,body{height:100%;margin:0;background:radial-gradient(ellipse at 20% 10%, rgba(124,58,237,0.18) 0%, transparent 25%), linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);color:var(--text)}
-    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
-    .card{
-      width:100%;max-width:420px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius:18px;padding:22px 20px;text-align:center;backdrop-filter: blur(6px); box-shadow: 0 10px 40px rgba(2,6,23,0.6);
-      border: 1px solid rgba(124,58,237,0.12);
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cek Winrate GloryGame99</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle at top, #3a0072, #000);
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+  }
 
-    h1{margin:0;font-size:18px;letter-spacing:1px;color:var(--accent1);text-shadow:0 6px 18px rgba(124,58,237,0.12)}
-    p.lead{margin:10px 0 20px;color:rgba(231,249,255,0.75);font-size:13px}
-    .winbox{background:linear-gradient(90deg, rgba(124,58,237,0.06), rgba(110,231,246,0.02));padding:18px;border-radius:12px;margin-bottom:16px;box-shadow:0 6px 20px rgba(7,10,30,0.5)}
-    .percent{font-size:64px;font-weight:800;line-height:1;color:transparent;
-      background:linear-gradient(90deg,var(--accent1), #b8a1ff 60%, var(--accent2)); -webkit-background-clip: text;
-      text-shadow: 0 6px 28px rgba(124,58,237,0.12)}
-    .idname{margin-top:6px;font-size:14px;color:rgba(231,249,255,0.75)}
-    .sub{font-size:12px;color:rgba(231,249,255,0.55);margin-top:8px}
+  h1 {
+    margin-top: 40px;
+    font-size: 1.8rem;
+    color: #00ffcc;
+    text-shadow: 0 0 20px #00ffcc;
+  }
 
-    /* loading bar */
-    .barwrap{margin:18px auto 6px; width:85%; height:18px;background:rgba(255,255,255,0.03);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
-    .bar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent1),var(--accent2));box-shadow:0 6px 20px rgba(124,58,237,0.18);border-radius:12px}
-    .bar .glow{position:relative;display:block;height:100%;box-shadow:0 0 18px rgba(110,231,246,0.35), inset 0 0 28px rgba(124,58,237,0.12)}
+  .input-container {
+    margin-top: 30px;
+  }
 
-    .btn{
-      display:inline-block;margin-top:16px;padding:12px 18px;border-radius:12px;background:linear-gradient(90deg,var(--accent2),var(--accent1));
-      color:#06121a;font-weight:700;text-decoration:none;box-shadow:0 10px 30px rgba(124,58,237,0.18);
-      transform:translateY(0);transition:transform .14s ease, box-shadow .14s ease;
-    }
-    .btn:active{transform:translateY(2px);box-shadow:0 6px 18px rgba(124,58,237,0.12)}
-    .smallnote{font-size:12px;color:rgba(231,249,255,0.55);margin-top:10px}
+  input {
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: none;
+    width: 250px;
+    font-size: 1rem;
+    outline: none;
+    text-align: center;
+  }
 
-    /* mobile tweak */
-    @media(max-width:420px){
-      .percent{font-size:54px}
-      .card{padding:18px}
-    }
-  </style>
+  button {
+    margin-top: 15px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #00ffff, #ff00ff);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 0 20px #00ffff;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+  }
+
+  .loading-bar {
+    margin: 40px auto;
+    width: 80%;
+    height: 20px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .loading-progress {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #ff00ff, #00ffff);
+    transition: width 3s linear;
+  }
+
+  .winrate {
+    font-size: 2.5rem;
+    color: #00ffcc;
+    text-shadow: 0 0 25px #00ffff;
+    margin-top: 20px;
+  }
+
+  .game-section {
+    display: none;
+    margin-top: 40px;
+  }
+
+  .game-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .game-card {
+    background: rgba(255,255,255,0.1);
+    border-radius: 15px;
+    padding: 10px;
+    width: 150px;
+    box-shadow: 0 0 15px #00ffff55;
+    transition: 0.3s;
+  }
+
+  .game-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #00ffff;
+  }
+
+  .game-card img {
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  .game-card h3 {
+    font-size: 1rem;
+    margin: 10px 0;
+  }
+
+  .game-card button {
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: #00ffff;
+    color: #000;
+    font-weight: bold;
+  }
+
+  audio {
+    display: none;
+  }
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card" role="main" aria-live="polite">
-      <h1>WINRATE DI-UPGRADE!</h1>
-      <p class="lead">Selamat — sistem mendeteksi kesempatan jackpot. Perubahan bersifat dinamis mengikuti algoritma permainan.</p>
 
-      <div class="winbox">
-        <div id="percent" class="percent">--%</div>
-        <div id="idname" class="idname">-</div>
-        <div class="sub">Peluang Jackpot</div>
+<h1>🎰 CEK WINRATE KAMU DI GLORYGAME99</h1>
 
-        <div class="barwrap" aria-hidden="true">
-          <div id="bar" class="bar"><span class="glow"></span></div>
-        </div>
-        <div id="loadingTxt" class="sub">Loading selesai 0%</div>
-      </div>
+<div class="input-container">
+  <input type="text" id="userid" placeholder="Masukkan USER ID kamu..." />
+  <button onclick="cekWinrate()">CEK WINRATE</button>
+</div>
 
-      <a id="continueBtn" class="btn" href="https://heylink.me/glorygame99/" target="_blank" rel="noopener">LANJUTKAN</a>
-      <div class="smallnote">Tip: Refresh untuk cek winrate baru. Main dengan tanggung jawab.</div>
-    </div>
-  </div>
+<div class="loading-bar" id="loadingBar" style="display:none;">
+  <div class="loading-progress" id="progress"></div>
+</div>
 
-  <script>
-    // Config: min and max (inclusive)
-    const MIN = 90;
-    const MAX = 98;
+<div class="winrate" id="winrateDisplay"></div>
 
-    // pick random integer between min and max inclusive
-    function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min }
+<div class="game-section" id="gameSection">
+  <h2 style="color:#00ffff;text-shadow:0 0 15px #00ffff;">🎯 GAME REKOMENDASI AUTO JACKPOT 🎯</h2>
+  <div class="game-grid" id="gameGrid"></div>
+</div>
 
-    // animate numeric count from 0 to target
-    function animateNumber(el, start, end, duration){
-      const range = end - start;
-      const startTime = performance.now();
-      function step(now){
-        const t = Math.min(1, (now - startTime) / duration);
-        const eased = t<.5 ? 2*t*t : -1 + (4 - 2*t)*t; // simple ease
-        const current = Math.round(start + range * eased);
-        el.textContent = current + '%';
-        if(t < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    }
+<audio id="loadingSound" src="https://cdn.pixabay.com/download/audio/2023/03/29/audio_f2f42b4de1.mp3?filename=loading-sound-effect-14695.mp3"></audio>
 
-    // animate bar width and loading percent text
-    function animateBar(barEl, loadingTxtEl, duration){
-      const startTime = performance.now();
-      function step(now){
-        const t = Math.min(1, (now - startTime) / duration);
-        const eased = t<.5 ? 2*t*t : -1 + (4 - 2*t)*t;
-        const pct = Math.round(eased * 100);
-        barEl.style.width = pct + '%';
-        loadingTxtEl.textContent = 'Loading selesai ' + pct + '%';
-        if(t < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    }
+<script>
+const games = [
+  {name:"Gates of Gatotkaca", img:"gates of gatotkaca.jpg"},
+  {name:"Gates of Olympus", img:"gates of olympus.jpeg"},
+  {name:"Lucky Neko", img:"lucky neko.jpg"},
+  {name:"Mahjong Ways", img:"mahjong ways.jpg"},
+  {name:"Mahjong Ways 2", img:"mahjong ways2.jpg"},
+  {name:"Starlight Princess", img:"starlight princess.jpg"},
+  {name:"Sweet Bonanza", img:"sweet bonanza.jpeg"},
+  {name:"Treasure of Aztec", img:"treazure of aztec.jpg"},
+  {name:"Wild Bandito", img:"wild bandito.jpg"},
+  {name:"Wild Bounty Showdown", img:"wild bounty showdown.jpg"},
+  {name:"Wild West Gold", img:"wild west gold.jpeg"}
+];
 
-    // main run
-    (function(){
-      const target = randInt(MIN, MAX);
-      const percentEl = document.getElementById('percent');
-      const idEl = document.getElementById('idname');
-      const barEl = document.getElementById('bar');
-      const loadingTxt = document.getElementById('loadingTxt');
+function cekWinrate() {
+  const user = document.getElementById('userid').value.trim();
+  if(!user){ alert('Masukkan USER ID kamu dulu!'); return; }
 
-      // Try to read username from URL param ?id=xxx or from localStorage (optional)
-      const urlParams = new URLSearchParams(location.search);
-      const idParam = urlParams.get('id') || localStorage.getItem('wg_last_id') || 'dannil';
-      // show id (shorten if too long)
-      idEl.textContent = idParam.length > 20 ? idParam.slice(0,18)+'…' : idParam;
-      // save for next time
-      try{ localStorage.setItem('wg_last_id', idParam) }catch(e){}
+  document.getElementById('loadingBar').style.display = 'block';
+  document.getElementById('winrateDisplay').innerHTML = '';
+  document.getElementById('gameSection').style.display = 'none';
+  
+  const progress = document.getElementById('progress');
+  const audio = document.getElementById('loadingSound');
+  audio.play();
 
-      // Animate: bar first, then number (slightly offset)
-      const totalDuration = 2200; // ms
-      animateBar(barEl, loadingTxt, totalDuration);
-      // number ease up to target but don't overshoot; animate slightly longer for nice effect
-      animateNumber(percentEl, 0, target, totalDuration + 300);
+  let winrate = Math.floor(Math.random() * 9) + 90; // 90–98%
+  progress.style.width = '100%';
 
-      // optionally flash glow when done
-      setTimeout(()=> {
-        barEl.style.transition = 'box-shadow .4s ease';
-        barEl.style.boxShadow = '0 14px 40px rgba(124,58,237,0.32)';
-        loadingTxt.textContent = 'Loading selesai 100%';
-      }, totalDuration + 50);
+  setTimeout(() => {
+    document.getElementById('winrateDisplay').innerHTML = `${winrate}% (${user})`;
+    audio.pause();
+    tampilkanGame();
+  }, 3000);
+}
 
-    })();
-  </script>
+function tampilkanGame(){
+  const section = document.getElementById('gameSection');
+  const grid = document.getElementById('gameGrid');
+  section.style.display = 'block';
+  grid.innerHTML = '';
+  
+  // ambil 3 game acak
+  const selected = games.sort(()=>0.5 - Math.random()).slice(0,3);
+  
+  selected.forEach(g => {
+    const card = document.createElement('div');
+    card.className = 'game-card';
+    card.innerHTML = `
+      <img src="${g.img}" alt="${g.name}">
+      <h3>${g.name}</h3>
+      <button onclick="window.open('https://heylink.me/glorygame99/', '_blank')">MAIN SEKARANG</button>
+    `;
+    grid.appendChild(card);
+  });
+}
+</script>
 </body>
 </html>
