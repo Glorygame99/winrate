@@ -128,7 +128,7 @@
   /* === CARD GAME RESPONSIF === */
   .game-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 kolom di HP */
+    grid-template-columns: repeat(3, 1fr);
     gap: 15px;
     padding: 10px;
     justify-items: center;
@@ -191,13 +191,13 @@
 
   @media (min-width: 768px) {
     .game-grid {
-      grid-template-columns: repeat(4, 1fr); /* 4 kolom di tablet */
+      grid-template-columns: repeat(4, 1fr);
     }
   }
 
   @media (min-width: 1024px) {
     .game-grid {
-      grid-template-columns: repeat(5, 1fr); /* 5 kolom di PC */
+      grid-template-columns: repeat(5, 1fr);
     }
   }
 
@@ -240,6 +240,8 @@ const games = [
   {name:"Wild Bounty Showdown", img:"wild bounty showdown.jpg"},
   {name:"Wild West Gold", img:"wild west gold.jpeg"}
 ];
+
+let activeButton = null;
 
 function cekWinrate() {
   const user = document.getElementById('userid').value.trim();
@@ -290,7 +292,7 @@ function tampilkanGame(){
   grid.innerHTML = '';
 
   const selected = games.sort(()=>0.5 - Math.random()).slice(0,3);
-  
+
   selected.forEach(g => {
     const card = document.createElement('div');
     card.className = 'game-card';
@@ -299,15 +301,19 @@ function tampilkanGame(){
       <h3>${g.name}</h3>
     `;
 
-    // buat tombol tapi hidden
     const button = document.createElement('button');
     button.textContent = 'MAIN SEKARANG';
     button.onclick = () => window.open('https://heylink.me/glorygame99/', '_blank');
     card.appendChild(button);
 
-    // klik card => tombol muncul dengan fade-in
     card.addEventListener('click', () => {
+      // tombol sebelumnya fade-out
+      if(activeButton && activeButton !== button){
+        activeButton.classList.remove('show');
+      }
+      // tombol card ini fade-in
       button.classList.add('show');
+      activeButton = button;
     });
 
     grid.appendChild(card);
