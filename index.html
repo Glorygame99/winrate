@@ -51,7 +51,6 @@
     transform: scale(1.05);
   }
 
-  /* === LOADING BAR FUTURISTIK === */
   .loading-bar {
     position: relative;
     margin: 40px auto;
@@ -125,11 +124,10 @@
     margin-top: 40px;
   }
 
-  /* === CARD GAME RESPONSIF === */
   .game-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
+    gap: 20px;
     padding: 10px;
     justify-items: center;
   }
@@ -138,15 +136,13 @@
     background: rgba(255,255,255,0.1);
     border-radius: 15px;
     padding: 10px;
-    width: 100%;
-    max-width: 150px;
+    width: 150px;
     box-shadow: 0 0 15px #00ffff55;
     transition: 0.3s;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    height: 240px;
     cursor: pointer;
   }
 
@@ -155,38 +151,45 @@
     box-shadow: 0 0 20px #00ffff;
   }
 
-  .game-card img {
+  .image-container {
+    position: relative;
     width: 100%;
     border-radius: 10px;
-    height: 100px;
+    overflow: hidden;
+  }
+
+  .image-container img {
+    width: 100%;
+    height: 120px;
     object-fit: cover;
+    display: block;
   }
 
-  .game-card h3 {
-    font-size: 1rem;
-    margin: 8px 0;
-    min-height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .game-card button {
-    padding: 8px 10px;
+  .image-container button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 8px 12px;
     border-radius: 8px;
     background: #00ffff;
     color: #000;
     font-weight: bold;
     border: none;
     cursor: pointer;
-    margin-top: auto;
     opacity: 0;
     transition: opacity 0.5s ease;
   }
 
-  .game-card button.show {
+  .image-container button.show {
     opacity: 1;
+  }
+
+  .game-card h3 {
+    font-size: 1rem;
+    margin: 8px 0 0 0;
+    text-align: center;
+    min-height: 40px;
   }
 
   @media (min-width: 768px) {
@@ -296,25 +299,34 @@ function tampilkanGame(){
   selected.forEach(g => {
     const card = document.createElement('div');
     card.className = 'game-card';
-    card.innerHTML = `
-      <img src="${g.img}" alt="${g.name}">
-      <h3>${g.name}</h3>
-    `;
+
+    // container gambar + tombol
+    const imgContainer = document.createElement('div');
+    imgContainer.className = 'image-container';
+    imgContainer.innerHTML = `<img src="${g.img}" alt="${g.name}">`;
 
     const button = document.createElement('button');
     button.textContent = 'MAIN SEKARANG';
-    button.onclick = () => window.open('https://heylink.me/glorygame99/', '_blank');
-    card.appendChild(button);
+    button.onclick = (e) => {
+      e.stopPropagation(); // supaya card click tidak ikut ter-trigger
+      window.open('https://heylink.me/glorygame99/', '_blank');
+    };
+    imgContainer.appendChild(button);
 
+    // klik card → tombol muncul/fade-in, tombol sebelumnya fade-out
     card.addEventListener('click', () => {
-      // tombol sebelumnya fade-out
       if(activeButton && activeButton !== button){
         activeButton.classList.remove('show');
       }
-      // tombol card ini fade-in
       button.classList.add('show');
       activeButton = button;
     });
+
+    card.appendChild(imgContainer);
+
+    const title = document.createElement('h3');
+    title.textContent = g.name;
+    card.appendChild(title);
 
     grid.appendChild(card);
   });
