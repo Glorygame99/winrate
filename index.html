@@ -124,14 +124,13 @@
     margin-top: 40px;
   }
 
-  /* === GRID SELALU 6 CARD DI MOBILE === */
   .game-grid {
     display: grid;
-    grid-template-columns: repeat(6, 150px); /* selalu 6 kolom */
+    grid-template-columns: repeat(6, 150px);
     gap: 20px;
     padding: 10px;
     justify-content: start;
-    overflow-x: auto; /* scroll horizontal jika tidak muat */
+    overflow-x: auto;
   }
 
   .game-card {
@@ -240,9 +239,9 @@ function cekWinrate() {
   const user = document.getElementById('userid').value.trim();
   if(!user){ alert('Masukkan USER ID kamu dulu!'); return; }
 
-  // sembunyikan judul dan input
-  document.getElementById('mainTitle').style.display = 'none';
-  document.getElementById('inputContainer').style.display = 'none';
+  // tampilkan judul dan input ID
+  document.getElementById('mainTitle').style.display = 'block';
+  document.getElementById('inputContainer').style.display = 'block';
 
   const bar = document.getElementById('loadingBar');
   const progress = document.getElementById('progress');
@@ -288,7 +287,7 @@ function tampilkanGame(){
   section.style.display = 'block';
   grid.innerHTML = '';
 
-  const selected = games.sort(()=>0.5 - Math.random()).slice(0,6); // ambil 6 game acak
+  const selected = games.sort(()=>0.5 - Math.random()).slice(0,6);
 
   selected.forEach(g => {
     const card = document.createElement('div');
