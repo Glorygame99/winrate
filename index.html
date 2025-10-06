@@ -3,224 +3,143 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Winrate Checker & Game Recommender</title>
+  <title>Winrate Di-Upgrade</title>
   <style>
-    :root{--bg:#0f172a;--card:#0b1220;--muted:#94a3b8;--accent:#06b6d4;--success:#10b981}
-    *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
-    body{margin:0;background:linear-gradient(180deg,#00121a 0%, #041022 100%);color:#e6eef6;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-    .container{width:100%;max-width:980px}
-    header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
-    h1{font-size:20px;margin:0}
-    p.lead{margin:0;color:var(--muted)}
-    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
-    .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 6px 24px rgba(2,6,23,0.6)}
-    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
-    input[type=text], input[type=number], textarea, select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);color:inherit}
-    button{background:var(--accent);border:none;padding:10px 12px;border-radius:9px;color:#042028;font-weight:600;cursor:pointer}
-    button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-    .result{margin-top:12px;padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(6,182,212,0.06), rgba(6,182,212,0.02));}
-    .big{font-size:28px;font-weight:700}
-    .muted{color:var(--muted);font-size:13px}
-    .recommend{display:flex;flex-direction:column;gap:10px;margin-top:12px}
-    .game{display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:8px;background:rgba(255,255,255,0.02)}
-    .game .left{display:flex;gap:10px;align-items:center}
-    .badge{font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03);color:var(--muted)}
-    .note{font-size:12px;color:var(--muted);margin-top:8px}
-    footer{margin-top:12px;color:var(--muted);font-size:13px}
-    @media(max-width:880px){.grid{grid-template-columns:1fr}.card{padding:14px}}
+    :root{
+      --bg1: #0b0320;
+      --bg2: #170134;
+      --accent1: #6EE7F6;
+      --accent2: #7C3AED;
+      --glow: rgba(110,231,246,0.18);
+      --card: rgba(255,255,255,0.04);
+      --text: #e7f9ff;
+    }
+    *{box-sizing:border-box;font-family:Inter, "Helvetica Neue", Arial, sans-serif}
+    html,body{height:100%;margin:0;background:radial-gradient(ellipse at 20% 10%, rgba(124,58,237,0.18) 0%, transparent 25%), linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);color:var(--text)}
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
+    .card{
+      width:100%;max-width:420px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:18px;padding:22px 20px;text-align:center;backdrop-filter: blur(6px); box-shadow: 0 10px 40px rgba(2,6,23,0.6);
+      border: 1px solid rgba(124,58,237,0.12);
+    }
+
+    h1{margin:0;font-size:18px;letter-spacing:1px;color:var(--accent1);text-shadow:0 6px 18px rgba(124,58,237,0.12)}
+    p.lead{margin:10px 0 20px;color:rgba(231,249,255,0.75);font-size:13px}
+    .winbox{background:linear-gradient(90deg, rgba(124,58,237,0.06), rgba(110,231,246,0.02));padding:18px;border-radius:12px;margin-bottom:16px;box-shadow:0 6px 20px rgba(7,10,30,0.5)}
+    .percent{font-size:64px;font-weight:800;line-height:1;color:transparent;
+      background:linear-gradient(90deg,var(--accent1), #b8a1ff 60%, var(--accent2)); -webkit-background-clip: text;
+      text-shadow: 0 6px 28px rgba(124,58,237,0.12)}
+    .idname{margin-top:6px;font-size:14px;color:rgba(231,249,255,0.75)}
+    .sub{font-size:12px;color:rgba(231,249,255,0.55);margin-top:8px}
+
+    /* loading bar */
+    .barwrap{margin:18px auto 6px; width:85%; height:18px;background:rgba(255,255,255,0.03);border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.03)}
+    .bar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent1),var(--accent2));box-shadow:0 6px 20px rgba(124,58,237,0.18);border-radius:12px}
+    .bar .glow{position:relative;display:block;height:100%;box-shadow:0 0 18px rgba(110,231,246,0.35), inset 0 0 28px rgba(124,58,237,0.12)}
+
+    .btn{
+      display:inline-block;margin-top:16px;padding:12px 18px;border-radius:12px;background:linear-gradient(90deg,var(--accent2),var(--accent1));
+      color:#06121a;font-weight:700;text-decoration:none;box-shadow:0 10px 30px rgba(124,58,237,0.18);
+      transform:translateY(0);transition:transform .14s ease, box-shadow .14s ease;
+    }
+    .btn:active{transform:translateY(2px);box-shadow:0 6px 18px rgba(124,58,237,0.12)}
+    .smallnote{font-size:12px;color:rgba(231,249,255,0.55);margin-top:10px}
+
+    /* mobile tweak */
+    @media(max-width:420px){
+      .percent{font-size:54px}
+      .card{padding:18px}
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div>
-        <h1>Winrate Checker & Game Recommender</h1>
-        <p class="lead">Masukkan data ID atau hasil permainan untuk cek winrate, lalu dapatkan rekomendasi game yang cocok.</p>
-      </div>
-    </header>
+  <div class="wrap">
+    <div class="card" role="main" aria-live="polite">
+      <h1>WINRATE DI-UPGRADE!</h1>
+      <p class="lead">Selamat — sistem mendeteksi kesempatan jackpot. Perubahan bersifat dinamis mengikuti algoritma permainan.</p>
 
-    <div class="grid">
-      <div class="card" aria-live="polite">
-        <form id="checker">
-          <label for="playerId">ID / Username (opsional)</label>
-          <input id="playerId" type="text" placeholder="contoh: user123" />
+      <div class="winbox">
+        <div id="percent" class="percent">--%</div>
+        <div id="idname" class="idname">-</div>
+        <div class="sub">Peluang Jackpot</div>
 
-          <div style="display:flex;gap:10px;margin-top:12px">
-            <div style="flex:1">
-              <label for="wins">Jumlah Menang</label>
-              <input id="wins" type="number" min="0" value="0" />
-            </div>
-            <div style="width:140px">
-              <label for="total">Total Game</label>
-              <input id="total" type="number" min="1" value="1" />
-            </div>
-          </div>
-
-          <p class="muted" style="margin-top:10px">Atau, kalau kamu sudah tahu winrate, masukkan langsung di bawah:</p>
-          <div style="display:flex;gap:10px;margin-top:8px">
-            <input id="directWinrate" type="number" min="0" max="99" placeholder="Winrate % (contoh: 90)" />
-            <button id="calcBtn" type="button">Cek Winrate</button>
-          </div>
-
-          <div class="result" id="result" style="display:none">
-            <div style="display:flex;align-items:center;justify-content:space-between">
-              <div>
-                <div class="muted">ID</div>
-                <div id="resId" class="big">-</div>
-              </div>
-              <div style="text-align:right">
-                <div class="muted">Winrate</div>
-                <div id="resWin" class="big">- %</div>
-              </div>
-            </div>
-
-            <div class="recommend" id="recommend"></div>
-
-            <div class="note">Tip: Gunakan data win/total dari 50+ game terakhir untuk hasil lebih akurat.</div>
-          </div>
-        </form>
-
-        <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
-          <button class="ghost" id="resetBtn">Reset</button>
-          <button class="ghost" id="sampleBtn">Isi Contoh</button>
+        <div class="barwrap" aria-hidden="true">
+          <div id="bar" class="bar"><span class="glow"></span></div>
         </div>
-
-        <footer>
-          Buat link rekomendasi yang bisa diklik — kamu bisa edit URL game di panel kanan.
-        </footer>
+        <div id="loadingTxt" class="sub">Loading selesai 0%</div>
       </div>
 
-      <div class="card">
-        <h3 style="margin-top:0">Daftar Game & Link Rekomendasi</h3>
-        <p class="muted">Atur URL yang akan ditampilkan saat rekomendasi muncul. Klik tombol <strong>Salin</strong> untuk ambil link.</p>
-
-        <div id="gamesList" style="margin-top:12px;display:flex;flex-direction:column;gap:8px"></div>
-
-        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.04);margin:12px 0" />
-        <label for="newName">Tambah / Edit Game</label>
-        <input id="newName" type="text" placeholder="Nama game (contoh: Pragmatic Auto)" />
-        <label style="margin-top:8px">URL</label>
-        <input id="newUrl" type="text" placeholder="https://heylink.me/....." />
-        <div style="display:flex;gap:8px;margin-top:8px">
-          <button id="addGame">Tambah / Update</button>
-          <button id="clearGames" class="ghost">Clear Semua</button>
-        </div>
-
-        <div class="note" style="margin-top:12px">Rekomendasi otomatis berbasiskan winrate:
-          <ul style="margin:6px 0 0 18px;color:var(--muted)">
-            <li>&ge; 90% — Rekomendasi: <strong>High-Risk / High-Reward</strong> (Pragmatic Turbo, Auto 50x)</li>
-            <li>70–89% — Rekomendasi: <strong>Medium</strong> (Manual 12–16x, Auto 30x)</li>
-            <li>&lt; 70% — Rekomendasi: <strong>Safe / Low-Bet</strong> (Soft PG, Auto 10x)</li>
-          </ul>
-        </div>
-      </div>
+      <a id="continueBtn" class="btn" href="https://heylink.me/glorygame99/" target="_blank" rel="noopener">LANJUTKAN</a>
+      <div class="smallnote">Tip: Refresh untuk cek winrate baru. Main dengan tanggung jawab.</div>
     </div>
   </div>
 
   <script>
-    const defaultGames = [
-      {name:'Pragmatic Turbo (Auto 50x)', url:'https://heylink.me/glorygame99/'},
-      {name:'Pragmatic Auto 30x', url:'https://heylink.me/glorygame99/'},
-      {name:'Manual 16x Recommendation', url:'https://heylink.me/glorygame99/'},
-      {name:'PG Soft Low-Bet', url:'https://heylink.me/glorygame99/'}
-    ];
+    // Config: min and max (inclusive)
+    const MIN = 90;
+    const MAX = 98;
 
-    const storageKey = 'winrec_games_v1';
-    let games = JSON.parse(localStorage.getItem(storageKey) || 'null') || defaultGames.slice();
+    // pick random integer between min and max inclusive
+    function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min }
 
-    const gamesList = document.getElementById('gamesList');
-    function renderGames(){
-      gamesList.innerHTML = '';
-      games.forEach((g, i) => {
-        const el = document.createElement('div');
-        el.className = 'game';
-        el.innerHTML = `
-          <div class="left">
-            <div style="width:10px;height:10px;border-radius:4px;background:linear-gradient(180deg,#06b6d4,#06b6d4)"></div>
-            <div>
-              <div style="font-weight:600">${escapeHtml(g.name)}</div>
-              <div class="muted" style="font-size:12px">${escapeHtml(g.url)}</div>
-            </div>
-          </div>
-          <div style="display:flex;gap:8px;align-items:center">
-            <button class="ghost" data-i="${i}" onclick="copyLink(${i})">Salin</button>
-            <button onclick="useGame(${i})">Buka</button>
-          </div>
-        `;
-        gamesList.appendChild(el);
-      });
+    // animate numeric count from 0 to target
+    function animateNumber(el, start, end, duration){
+      const range = end - start;
+      const startTime = performance.now();
+      function step(now){
+        const t = Math.min(1, (now - startTime) / duration);
+        const eased = t<.5 ? 2*t*t : -1 + (4 - 2*t)*t; // simple ease
+        const current = Math.round(start + range * eased);
+        el.textContent = current + '%';
+        if(t < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
     }
 
-    function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-
-    function copyLink(i){navigator.clipboard.writeText(games[i].url).then(()=>{alert('Link disalin: '+games[i].url)})}
-    function useGame(i){window.open(games[i].url,'_blank')}
-
-    document.getElementById('addGame').addEventListener('click', ()=>{
-      const name = document.getElementById('newName').value.trim();
-      const url = document.getElementById('newUrl').value.trim();
-      if(!name||!url){alert('Isi nama & URL dulu');return}
-      const idx = games.findIndex(g=>g.name.toLowerCase()===name.toLowerCase());
-      if(idx>=0) games[idx]={name,url}; else games.push({name,url});
-      localStorage.setItem(storageKey, JSON.stringify(games));
-      renderGames();
-      document.getElementById('newName').value='';document.getElementById('newUrl').value='';
-    })
-
-    document.getElementById('clearGames').addEventListener('click', ()=>{
-      if(confirm('Hapus semua game dari list?')){games=[];localStorage.removeItem(storageKey);renderGames()}
-    })
-
-    document.getElementById('sampleBtn').addEventListener('click', ()=>{
-      document.getElementById('playerId').value='user123';
-      document.getElementById('wins').value=45;document.getElementById('total').value=50;document.getElementById('directWinrate').value='';
-    })
-
-    document.getElementById('resetBtn').addEventListener('click', ()=>{
-      document.getElementById('checker').reset();document.getElementById('result').style.display='none';
-    })
-
-    document.getElementById('calcBtn').addEventListener('click', ()=>{
-      let winrate = parseFloat(document.getElementById('directWinrate').value);
-      const wins = parseInt(document.getElementById('wins').value||0,10);
-      const total = parseInt(document.getElementById('total').value||0,10);
-      if(!isNaN(winrate) && winrate>=0 && winrate<=99){
-      } else {
-        if(total<=0){alert('Isi total game valid (>=1) atau masukkan winrate langsung');return}
-        winrate = total>0? (wins/total*100) : 0;
-        if(winrate>99) winrate=99;
+    // animate bar width and loading percent text
+    function animateBar(barEl, loadingTxtEl, duration){
+      const startTime = performance.now();
+      function step(now){
+        const t = Math.min(1, (now - startTime) / duration);
+        const eased = t<.5 ? 2*t*t : -1 + (4 - 2*t)*t;
+        const pct = Math.round(eased * 100);
+        barEl.style.width = pct + '%';
+        loadingTxtEl.textContent = 'Loading selesai ' + pct + '%';
+        if(t < 1) requestAnimationFrame(step);
       }
-      showResult(winrate);
-    })
-
-    function showResult(winrate){
-      const id = document.getElementById('playerId').value || '-';
-      document.getElementById('resId').textContent = id;
-      document.getElementById('resWin').textContent = winrate.toFixed(1)+ ' %';
-      const rec = document.getElementById('recommend');
-      rec.innerHTML = '';
-
-      let picks = [];
-      if(winrate>=90){
-        picks = games.filter(g=>/50|turbo|pragmatic/i.test(g.name));
-      } else if(winrate>=70){
-        picks = games.filter(g=>/30|manual|16|12/i.test(g.name));
-      } else {
-        picks = games.filter(g=>/Soft|Low|10x|PG/i.test(g.name));
-      }
-      if(picks.length===0) picks = games.slice(0,3);
-
-      picks.forEach((p, idx)=>{
-        const d = document.createElement('div');
-        d.className='game';
-        d.innerHTML = `<div class="left"><div class="badge">#${idx+1}</div><div style="margin-left:8px"><div style="font-weight:700">${escapeHtml(p.name)}</div><div class="muted" style="font-size:12px">${escapeHtml(p.url)}</div></div></div><div><button onclick="useGame(${games.indexOf(p)})">Buka</button></div>`;
-        rec.appendChild(d);
-      });
-
-      document.getElementById('result').style.display='block';
+      requestAnimationFrame(step);
     }
 
-    renderGames();
+    // main run
+    (function(){
+      const target = randInt(MIN, MAX);
+      const percentEl = document.getElementById('percent');
+      const idEl = document.getElementById('idname');
+      const barEl = document.getElementById('bar');
+      const loadingTxt = document.getElementById('loadingTxt');
+
+      // Try to read username from URL param ?id=xxx or from localStorage (optional)
+      const urlParams = new URLSearchParams(location.search);
+      const idParam = urlParams.get('id') || localStorage.getItem('wg_last_id') || 'dannil';
+      // show id (shorten if too long)
+      idEl.textContent = idParam.length > 20 ? idParam.slice(0,18)+'…' : idParam;
+      // save for next time
+      try{ localStorage.setItem('wg_last_id', idParam) }catch(e){}
+
+      // Animate: bar first, then number (slightly offset)
+      const totalDuration = 2200; // ms
+      animateBar(barEl, loadingTxt, totalDuration);
+      // number ease up to target but don't overshoot; animate slightly longer for nice effect
+      animateNumber(percentEl, 0, target, totalDuration + 300);
+
+      // optionally flash glow when done
+      setTimeout(()=> {
+        barEl.style.transition = 'box-shadow .4s ease';
+        barEl.style.boxShadow = '0 14px 40px rgba(124,58,237,0.32)';
+        loadingTxt.textContent = 'Loading selesai 100%';
+      }, totalDuration + 50);
+
+    })();
   </script>
 </body>
 </html>
