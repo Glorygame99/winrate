@@ -126,7 +126,7 @@
 
   .game-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr); /* default 3 kolom mobile */
     gap: 20px;
     padding: 10px;
     justify-items: center;
@@ -192,15 +192,9 @@
     min-height: 40px;
   }
 
-  @media (min-width: 768px) {
-    .game-grid {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-
   @media (min-width: 1024px) {
     .game-grid {
-      grid-template-columns: repeat(6, 1fr); /* sekarang tampil 6 kolom di PC */
+      grid-template-columns: repeat(6, 1fr); /* 6 kolom PC besar */
     }
   }
 
