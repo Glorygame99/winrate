@@ -58,13 +58,15 @@
     background: rgba(255,255,255,0.2);
     border-radius: 10px;
     overflow: hidden;
+    box-shadow: 0 0 15px #00ffff55;
   }
 
   .loading-progress {
     height: 100%;
     width: 0;
     background: linear-gradient(90deg, #ff00ff, #00ffff);
-    transition: width 3s linear;
+    border-radius: 10px;
+    transition: width 0.2s linear;
   }
 
   .winrate {
@@ -164,22 +166,42 @@ function cekWinrate() {
   const user = document.getElementById('userid').value.trim();
   if(!user){ alert('Masukkan USER ID kamu dulu!'); return; }
 
-  document.getElementById('loadingBar').style.display = 'block';
-  document.getElementById('winrateDisplay').innerHTML = '';
-  document.getElementById('gameSection').style.display = 'none';
-  
+  const bar = document.getElementById('loadingBar');
   const progress = document.getElementById('progress');
+  const display = document.getElementById('winrateDisplay');
   const audio = document.getElementById('loadingSound');
+  const section = document.getElementById('gameSection');
+
+  bar.style.display = 'block';
+  display.innerHTML = '';
+  section.style.display = 'none';
+  progress.style.width = '0%';
   audio.play();
 
-  let winrate = Math.floor(Math.random() * 9) + 90; // 90–98%
-  progress.style.width = '100%';
+  const target = Math.floor(Math.random() * 9) + 90; // 90–98%
+  let current = 0;
 
-  setTimeout(() => {
-    document.getElementById('winrateDisplay').innerHTML = `${winrate}% (${user})`;
-    audio.pause();
-    tampilkanGame();
-  }, 3000);
+  const interval = setInterval(() => {
+    if (current >= 100) clearInterval(interval);
+    else {
+      current += 2;
+      progress.style.width = current + "%";
+    }
+  }, 50); // animasi bar 5 detik total
+
+  // tampilkan angka winrate perlahan
+  let angka = 0;
+  const angkaInterval = setInterval(() => {
+    if (angka >= target) {
+      clearInterval(angkaInterval);
+      display.innerHTML = `${target}% (${user})`;
+      audio.pause();
+      tampilkanGame();
+    } else {
+      angka++;
+      display.innerHTML = `${angka}% (${user})`;
+    }
+  }, 45); // angka naik perlahan juga
 }
 
 function tampilkanGame(){
@@ -188,7 +210,6 @@ function tampilkanGame(){
   section.style.display = 'block';
   grid.innerHTML = '';
   
-  // ambil 3 game acak
   const selected = games.sort(()=>0.5 - Math.random()).slice(0,3);
   
   selected.forEach(g => {
