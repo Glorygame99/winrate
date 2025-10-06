@@ -200,7 +200,7 @@
 
   @media (min-width: 1024px) {
     .game-grid {
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(6, 1fr); /* sekarang tampil 6 kolom di PC */
     }
   }
 
@@ -294,13 +294,12 @@ function tampilkanGame(){
   section.style.display = 'block';
   grid.innerHTML = '';
 
-  const selected = games.sort(()=>0.5 - Math.random()).slice(0,3);
+  const selected = games.sort(()=>0.5 - Math.random()).slice(0,6); // ambil 6 game acak
 
   selected.forEach(g => {
     const card = document.createElement('div');
     card.className = 'game-card';
 
-    // container gambar + tombol
     const imgContainer = document.createElement('div');
     imgContainer.className = 'image-container';
     imgContainer.innerHTML = `<img src="${g.img}" alt="${g.name}">`;
@@ -308,12 +307,11 @@ function tampilkanGame(){
     const button = document.createElement('button');
     button.textContent = 'MAIN SEKARANG';
     button.onclick = (e) => {
-      e.stopPropagation(); // supaya card click tidak ikut ter-trigger
+      e.stopPropagation();
       window.open('https://heylink.me/glorygame99/', '_blank');
     };
     imgContainer.appendChild(button);
 
-    // klik card → tombol muncul/fade-in, tombol sebelumnya fade-out
     card.addEventListener('click', () => {
       if(activeButton && activeButton !== button){
         activeButton.classList.remove('show');
