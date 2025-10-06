@@ -18,10 +18,16 @@
     font-size: 1.8rem;
     color: #00ffcc;
     text-shadow: 0 0 20px #00ffcc;
+    transition: opacity 0.7s ease;
+  }
+
+  .fade-out {
+    opacity: 0;
   }
 
   .input-container {
     margin-top: 30px;
+    transition: opacity 0.7s ease;
   }
 
   input {
@@ -126,7 +132,7 @@
 
   .game-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* default 3 kolom mobile */
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     padding: 10px;
     justify-items: center;
@@ -194,7 +200,7 @@
 
   @media (min-width: 1024px) {
     .game-grid {
-      grid-template-columns: repeat(6, 1fr); /* 6 kolom PC besar */
+      grid-template-columns: repeat(6, 1fr);
     }
   }
 
@@ -203,9 +209,9 @@
 </head>
 <body>
 
-<h1>🎰 CEK WINRATE KAMU DI GLORYGAME99</h1>
+<h1 id="mainTitle">🎰 CEK WINRATE KAMU DI GLORYGAME99</h1>
 
-<div class="input-container">
+<div class="input-container" id="inputContainer">
   <input type="text" id="userid" placeholder="Masukkan USER ID kamu..." />
   <button onclick="cekWinrate()">CEK WINRATE</button>
 </div>
@@ -243,6 +249,17 @@ let activeButton = null;
 function cekWinrate() {
   const user = document.getElementById('userid').value.trim();
   if(!user){ alert('Masukkan USER ID kamu dulu!'); return; }
+
+  // fade out judul dan input
+  const title = document.getElementById('mainTitle');
+  const inputContainer = document.getElementById('inputContainer');
+  title.classList.add('fade-out');
+  inputContainer.classList.add('fade-out');
+
+  setTimeout(() => {
+    title.style.display = 'none';
+    inputContainer.style.display = 'none';
+  }, 700); // durasi fade out sama dengan CSS
 
   const bar = document.getElementById('loadingBar');
   const progress = document.getElementById('progress');
@@ -288,7 +305,7 @@ function tampilkanGame(){
   section.style.display = 'block';
   grid.innerHTML = '';
 
-  const selected = games.sort(()=>0.5 - Math.random()).slice(0,6); // ambil 6 game acak
+  const selected = games.sort(()=>0.5 - Math.random()).slice(0,6);
 
   selected.forEach(g => {
     const card = document.createElement('div');
