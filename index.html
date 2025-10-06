@@ -18,16 +18,10 @@
     font-size: 1.8rem;
     color: #00ffcc;
     text-shadow: 0 0 20px #00ffcc;
-    transition: opacity 0.7s ease;
-  }
-
-  .fade-out {
-    opacity: 0;
   }
 
   .input-container {
     margin-top: 30px;
-    transition: opacity 0.7s ease;
   }
 
   input {
@@ -130,12 +124,14 @@
     margin-top: 40px;
   }
 
+  /* === GRID SELALU 6 CARD DI MOBILE === */
   .game-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(6, 150px); /* selalu 6 kolom */
     gap: 20px;
     padding: 10px;
-    justify-items: center;
+    justify-content: start;
+    overflow-x: auto; /* scroll horizontal jika tidak muat */
   }
 
   .game-card {
@@ -198,12 +194,6 @@
     min-height: 40px;
   }
 
-  @media (min-width: 1024px) {
-    .game-grid {
-      grid-template-columns: repeat(6, 1fr);
-    }
-  }
-
   audio { display: none; }
 </style>
 </head>
@@ -250,16 +240,9 @@ function cekWinrate() {
   const user = document.getElementById('userid').value.trim();
   if(!user){ alert('Masukkan USER ID kamu dulu!'); return; }
 
-  // fade out judul dan input
-  const title = document.getElementById('mainTitle');
-  const inputContainer = document.getElementById('inputContainer');
-  title.classList.add('fade-out');
-  inputContainer.classList.add('fade-out');
-
-  setTimeout(() => {
-    title.style.display = 'none';
-    inputContainer.style.display = 'none';
-  }, 700); // durasi fade out sama dengan CSS
+  // sembunyikan judul dan input
+  document.getElementById('mainTitle').style.display = 'none';
+  document.getElementById('inputContainer').style.display = 'none';
 
   const bar = document.getElementById('loadingBar');
   const progress = document.getElementById('progress');
@@ -305,7 +288,7 @@ function tampilkanGame(){
   section.style.display = 'block';
   grid.innerHTML = '';
 
-  const selected = games.sort(()=>0.5 - Math.random()).slice(0,6);
+  const selected = games.sort(()=>0.5 - Math.random()).slice(0,6); // ambil 6 game acak
 
   selected.forEach(g => {
     const card = document.createElement('div');
