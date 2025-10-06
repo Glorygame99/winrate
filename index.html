@@ -147,6 +147,7 @@
     justify-content: space-between;
     align-items: center;
     height: 240px;
+    cursor: pointer;
   }
 
   .game-card:hover {
@@ -180,6 +181,12 @@
     border: none;
     cursor: pointer;
     margin-top: auto;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .game-card button.show {
+    opacity: 1;
   }
 
   @media (min-width: 768px) {
@@ -290,8 +297,19 @@ function tampilkanGame(){
     card.innerHTML = `
       <img src="${g.img}" alt="${g.name}">
       <h3>${g.name}</h3>
-      <button onclick="window.open('https://heylink.me/glorygame99/', '_blank')">MAIN SEKARANG</button>
     `;
+
+    // buat tombol tapi hidden
+    const button = document.createElement('button');
+    button.textContent = 'MAIN SEKARANG';
+    button.onclick = () => window.open('https://heylink.me/glorygame99/', '_blank');
+    card.appendChild(button);
+
+    // klik card => tombol muncul dengan fade-in
+    card.addEventListener('click', () => {
+      button.classList.add('show');
+    });
+
     grid.appendChild(card);
   });
 }
