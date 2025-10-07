@@ -294,13 +294,23 @@ function cekWinrate() {
   }, 45);
 }
 
-function tampilkanGame(){
+function tampilkanGame() {
   const section = document.getElementById('gameSection');
   const grid = document.getElementById('gameGrid');
   section.style.display = 'block';
   grid.innerHTML = '';
 
-  const selected = games.sort(()=>0.5 - Math.random()).slice(0,6);
+  // buat salinan agar array aslinya tidak berubah
+  const shuffled = [...games];
+
+  // algoritma acak Fisher–Yates
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  // ambil 6 pertama tanpa duplikat
+  const selected = shuffled.slice(0, 6);
 
   selected.forEach(g => {
     const card = document.createElement('div');
@@ -319,7 +329,7 @@ function tampilkanGame(){
     imgContainer.appendChild(button);
 
     card.addEventListener('click', () => {
-      if(activeButton && activeButton !== button){
+      if (activeButton && activeButton !== button) {
         activeButton.classList.remove('show');
       }
       button.classList.add('show');
